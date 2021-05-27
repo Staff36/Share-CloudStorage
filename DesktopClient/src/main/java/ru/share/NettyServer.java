@@ -1,5 +1,6 @@
 package ru.share;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -8,6 +9,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
@@ -15,36 +17,32 @@ import lombok.extern.log4j.Log4j;
 import ru.share.Handlers.MainHandler;
 
 @Log4j
-public class Application {
+public class NettyServer implements Runnable {
+    private SocketChannel clientChanel;
 
-
-    public static void main(String[] args) {
-        final int maxObjectSize = 1024 *1024;
-        final int soBackLog = 128;
+    @Override
+    public void run() {
         final int PORT = 9909;
 
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         try {
-            ServerBootstrap bootstrap = new ServerBootstrap();
+            Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(eventLoopGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                    .channel(NioSocketChannel.class)
+                    .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            clientChanel = socketChannel;
                             socketChannel.pipeline().addLast(
-                                    new ObjectDecoder(maxObjectSize, ClassResolvers.cacheDisabled(null)),
+                                    new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                                     new ObjectEncoder(),
                                     new MainHandler()
                             );
                         }
-                    })
-                    .option(ChannelOption.SO_BACKLOG, soBackLog)
-                    .option(ChannelOption.TCP_NODELAY,true)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
-
-            ChannelFuture channelFuture = bootstrap.bind(PORT).sync();
-            log.debug("Server is started");
+                    });
+            ChannelFuture channelFuture = bootstrap.connect("localhost", PORT).sync();
             channelFuture.channel().closeFuture().sync();
+            log.debug("Server is started");
         } catch (InterruptedException e) {
             log.error("Something was wrong", e);
         } finally {
@@ -52,3 +50,4 @@ public class Application {
         }
     }
 }
+
