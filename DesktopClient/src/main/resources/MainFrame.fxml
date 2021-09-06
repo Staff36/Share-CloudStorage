@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="602.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.share.Controllers.MainFrameController">
+   <children>
+      <ImageView fitHeight="635.0" fitWidth="601.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@bck.jpg" />
+         </image>
+      </ImageView>
+      <Group layoutX="14.0" layoutY="39.0">
+         <ListView fx:id="clientFilesList" layoutY="56.0" prefHeight="470.0" prefWidth="255.0" />
+            <Button layoutX="188.0" layoutY="526.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Open" />
+            <TextField fx:id="clientsPath" layoutY="22.0" prefHeight="25.0" prefWidth="189.0" promptText="Path" />
+            <Button layoutX="202.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="52.0" text="Up" />
+            <Label prefHeight="17.0" prefWidth="234.0" text="Clients files" />
+      </Group>
+      <Group layoutX="352.0" layoutY="39.0">
+            <Button layoutX="163.0" layoutY="526.0" mnemonicParsing="false" text="Download" />
+            <TextField layoutY="22.0" prefHeight="25.0" prefWidth="172.0" promptText="Path" />
+            <Button layoutX="181.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="52.0" text="UP" />
+            <Label prefHeight="17.0" prefWidth="234.0" text="Servers files" />
+         <ListView fx:id="serversFilesList" layoutY="56.0" prefHeight="470.0" prefWidth="255.0" />
+      </Group>
+      <Button layoutX="286.0" layoutY="218.0" mnemonicParsing="false" text="-&gt;" />
+      <Button layoutX="286.0" layoutY="350.0" mnemonicParsing="false" text="&lt;-" />
+      <Button layoutX="529.0" layoutY="14.0" mnemonicParsing="false" text="Settings">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </Button>
+   </children>
+</AnchorPane>
